@@ -1,0 +1,122 @@
+import random
+
+# Tworzę listę z polami i listę z pionkami
+pola_do_wyboru = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+u1a, u1b, u1c, u2a, u2b, u2c = None, None, None, None, None, None
+pionki_pierwszego_gracza = [u1a, u1b, u1c]
+pionki_drugiego_gracza = [u2a, u2b, u2c]
+pionki = [u1a, u1b, u1c, u2a, u2b, u2c]
+
+# Przypisuję każdemu pionkowi losowe miejsce w tablicy, ale niezajęte przez inny pionek
+
+# Zbiór zawierający zajęte indeksy
+zajete_miejsca = set()
+
+# Wybierz losowy indeks, który nie jest już przypisany do innej zmiennej
+for i in range(len(pionki)):
+    while True:
+        x = random.choice(pola_do_wyboru)
+        if x not in zajete_miejsca:
+            pionki[i] = x
+            zajete_miejsca.add(x)
+            break
+
+print(f"Zajęte pola to {pionki}")  # teraz każdy pionek ma przypisane losowe pole
+u1a = pionki[0]
+u1b = pionki[1]
+u1c = pionki[2]
+u2a = pionki[3]
+u2b = pionki[4]
+u2c = pionki[5]
+print(f"Pionki pierwszego gracza stoją na polach {u1a, u1b, u1c}")
+print(f"Pionki drugiego gracza stoją na polach {u2a, u2b, u2c}")
+
+# ruch nie jest możliwy jeżeli któryś z graczy posiada 3 pionki w rzędzie
+win1 = [1, 2, 3]
+win2 = [4, 5, 6]
+win3 = [7, 8, 9]
+win4 = [1, 4, 7]
+win5 = [2, 5, 8]
+win6 = [3, 6, 9]
+win7 = [1, 5, 9]
+win8 = [3, 5, 7]
+zwycieskie_wyniki = [win1, win2, win3, win4, win5, win6, win7, win8]
+
+# Sprawdzanie czy pionki pierwszego gracza tworzą zwycięską kombinację
+pierwszy_gracz_wygral = any(
+    set(kombinacja).issubset(set(pionki_pierwszego_gracza)) for kombinacja in zwycieskie_wyniki)
+
+if pierwszy_gracz_wygral:
+    print("Wygrałeś!")
+else:
+    # każdy z użytkowników
+    # ma 1 ruch jednym z trzech kamieni
+
+  pierwszy_gracz_wygral = False
+
+while not pierwszy_gracz_wygral:
+    while True:
+        ruch_pierwszego_uzytkownika_pole = int(input("Na które pole, pierwszy gracz chce przesunąć pionek?"))
+        if ruch_pierwszego_uzytkownika_pole in pionki:
+            print("To pole jest zajęte. Wybierz inne pole")
+        else:
+            break
+
+    ruch_pierwszego_uzytkownika_pionek = int(input("Który pionek chcesz ruszyć? Wpisz: 1, 2 lub 3"))
+
+    # Określenie z którego pola na które można się ruszyć
+    # Kod sprawdzający możliwe ruchy i przypisujący nową pozycję pionka
+
+    # Sprawdzenie, czy pierwszy gracz wygrał
+    pierwszy_gracz_wygral = any(
+        set(kombinacja).issubset(set(pionki_pierwszego_gracza)) for kombinacja in zwycieskie_wyniki)
+
+    if not pierwszy_gracz_wygral:
+        print("Nie wygrałeś jeszcze. Spróbuj ponownie.")
+    else:
+        print("Wygrałeś!")
+
+  
+    # określenie z którego pola na które można się ruszyć
+
+    mozliwe_ruchy = {
+        1: (2, 4, 5),
+        2: (1, 4, 5, 6, 3),
+        3: (2, 5, 6),
+        4: (1, 2, 5, 8, 7),
+        5: (1, 2, 3, 4, 6, 7, 8, 9),
+        6: (3, 2, 5, 8, 9),
+        7: (4, 5, 8),
+        8: (7, 4, 5, 6, 9),
+        9: (6, 5, 8)
+    }
+
+    if ruch_pierwszego_uzytkownika_pionek == 1:
+        aktualny_pionek = u1a
+    elif ruch_pierwszego_uzytkownika_pionek == 2:
+        aktualny_pionek = u1b
+    elif ruch_pierwszego_uzytkownika_pionek == 3:
+        aktualny_pionek = u1c
+
+    if ruch_pierwszego_uzytkownika_pole in mozliwe_ruchy[aktualny_pionek]:
+        if ruch_pierwszego_uzytkownika_pionek == 1:
+            u1a = ruch_pierwszego_uzytkownika_pole
+        elif ruch_pierwszego_uzytkownika_pionek == 2:
+            u1b = ruch_pierwszego_uzytkownika_pole
+        elif ruch_pierwszego_uzytkownika_pionek == 3:
+            u1c = ruch_pierwszego_uzytkownika_pole
+    else:
+        print("Nie można wykonać takiego ruchu z tego pola. Przegrałeś.")
+
+    print(f"Pionki po ruchu:\n pierwszy gracz: {u1a, u1b, u1c} \n drugi gracz: {u2a, u2b, u2c}")
+
+    # ruch nie jest możliwy jeżeli któryś z graczy posiada 3 pionki w rzędzie
+    pionki_pierwszego_gracza = [u1a, u1b, u1c]
+    pierwszy_gracz_wygral = any(
+        set(kombinacja).issubset(set(pionki_pierwszego_gracza)) for kombinacja in zwycieskie_wyniki)
+
+if pierwszy_gracz_wygral:
+    print("Wygrałeś!")
+else:
+    # Kod dla ruchów drugiego gracza
+    pass
